@@ -24,6 +24,7 @@
 #include "crc.h"
 #include "dma.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -100,6 +101,7 @@ int main(void)
   MX_CRC_Init();
   MX_TIM5_Init();
   MX_TIM7_Init();
+  MX_UART5_Init();
   /* USER CODE BEGIN 2 */
   InitPwmControllers();
   /* USER CODE END 2 */

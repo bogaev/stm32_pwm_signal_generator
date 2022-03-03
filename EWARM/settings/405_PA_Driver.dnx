@@ -24,7 +24,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>1610471551</Checksum>
+        <Checksum>486025367</Checksum>
     </DebugChecksum>
     <Disassembly>
         <MixedMode>1</MixedMode>
@@ -141,10 +141,15 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Count>0</Count>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\App\pwm_controller.cpp}.119.5" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c}.6590.3" 0 0 1 "" 0 "" 0</Bp1>
+        <Count>2</Count>
     </Breakpoints2>
     <Aliases>
-        <Count>0</Count>
+        <A0>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Core\Src\main.c" ""</A0>
+        <A1>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c" ""</A1>
+        <A2>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c" ""</A2>
+        <Count>3</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
 </settings>

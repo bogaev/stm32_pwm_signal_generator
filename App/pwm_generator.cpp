@@ -1,7 +1,7 @@
 #include "pwm_generator.hpp"
 
 PwmGenerator::PwmGenerator(SignalGenerator* params[],
-                           tdDutyCycle dutyCycle, tdDMABuffers& dma) :
+                           tdDutyCycle dutyCycle, tdDataBuffers& dma) :
   carrier(params[0]),
   amp_mod(params[1]),
   freq_mod(params[2]),
@@ -29,13 +29,13 @@ void PwmGenerator::updateBuffer() {
   dma_.buffer[is_negative_halfwave][buffer_index] = getDutyCycle();
   dma_.buffer[!is_negative_halfwave][buffer_index] = 0;
   ++buffer_index;
-  if(buffer_index >= DMA_BUFFER_SIZE) {
+  if(buffer_index >= DATA_BUFFER_SIZE) {
     buffer_index = 0;
   }
 }
 
 void PwmGenerator::generateNextHalfbuffer() {
-  for(uint16_t i = 0; i < DMA_BUFFER_SIZE / 2; ++i) {
+  for(uint16_t i = 0; i < DATA_BUFFER_SIZE / 2; ++i) {
     updateBuffer();
   }
 }

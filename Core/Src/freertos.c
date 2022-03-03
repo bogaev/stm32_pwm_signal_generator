@@ -59,10 +59,10 @@ const osThreadAttr_t GenNextHalfwave_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for GenerateNextHalfWaveSemaphore */
-osSemaphoreId_t GenerateNextHalfWaveSemaphoreHandle;
-const osSemaphoreAttr_t GenerateNextHalfWaveSemaphore_attributes = {
-  .name = "GenerateNextHalfWaveSemaphore"
+/* Definitions for GenerateHalfWaveSemaphore */
+osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
+const osSemaphoreAttr_t GenerateHalfWaveSemaphore_attributes = {
+  .name = "GenerateHalfWaveSemaphore"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,8 +90,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_MUTEX */
 
   /* Create the semaphores(s) */
-  /* creation of GenerateNextHalfWaveSemaphore */
-  GenerateNextHalfWaveSemaphoreHandle = osSemaphoreNew(10, 10, &GenerateNextHalfWaveSemaphore_attributes);
+  /* creation of GenerateHalfWaveSemaphore */
+  GenerateHalfWaveSemaphoreHandle = osSemaphoreNew(30, 30, &GenerateHalfWaveSemaphore_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */

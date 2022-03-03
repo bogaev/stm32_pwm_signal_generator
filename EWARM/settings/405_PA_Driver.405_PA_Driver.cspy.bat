@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\EWARM\settings\405_PA_Driver.405_PA_Driver.general.xcl" --backend -f "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\EWARM\settings\405_PA_Driver.405_PA_Driver.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\Users\Sergey\YandexDisk\Work\Projects\Electropoesis\Software\PWM_SignalGenerator\EWARM\settings\405_PA_Driver.405_PA_Driver.general.xcl" --backend -f "C:\Users\Sergey\YandexDisk\Work\Projects\Electropoesis\Software\PWM_SignalGenerator\EWARM\settings\405_PA_Driver.405_PA_Driver.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\EWARM\settings\405_PA_Driver.405_PA_Driver.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\EWARM\settings\405_PA_Driver.405_PA_Driver.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\Users\Sergey\YandexDisk\Work\Projects\Electropoesis\Software\PWM_SignalGenerator\EWARM\settings\405_PA_Driver.405_PA_Driver.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\Sergey\YandexDisk\Work\Projects\Electropoesis\Software\PWM_SignalGenerator\EWARM\settings\405_PA_Driver.405_PA_Driver.driver.xcl" 
 
 @echo off 
 :end

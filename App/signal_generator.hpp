@@ -7,7 +7,7 @@
 const uint16_t SIGNAL_MAX_SIZE = (1<<13); //8192
 const uint16_t SIGNAL_MIN_SAMPLE_RATE = 128;
 const uint16_t SIGNAL_MAX_SAMPLE_RATE = SIGNAL_MAX_SIZE;
-const uint32_t DMA_BUFFER_SIZE = SIGNAL_MAX_SIZE*2;
+const uint32_t DATA_BUFFER_SIZE = SIGNAL_MAX_SIZE*2;
 const float pi = std::acos(-1);
 
 typedef enum tdSignalTypes_ {

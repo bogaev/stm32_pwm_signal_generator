@@ -8,7 +8,7 @@
 
 const float TIMER_PERIOD = 656.f;
 
-struct tdDMABuffers {
+struct tdDataBuffers {
   uint16_t* buffer[2] = { nullptr, nullptr };
 };
 
@@ -45,13 +45,13 @@ class PwmGenerator {
     SignalGenerator* carrier = nullptr;
     SignalGenerator* amp_mod = nullptr;
     SignalGenerator* freq_mod = nullptr;
-    tdDMABuffers& dma_;
+    tdDataBuffers& dma_;
     tdDutyCycle dutyCycle_;
     uint8_t is_negative_halfwave = 0;
     uint32_t buffer_index = 0;
     
 public:
-    PwmGenerator(SignalGenerator* params[], tdDutyCycle dutyCycle, tdDMABuffers& dma);
+    PwmGenerator(SignalGenerator* params[], tdDutyCycle dutyCycle, tdDataBuffers& dma);
     float getNext();
     inline uint16_t getDutyCycle();
     void updateBuffer();
