@@ -1433,6 +1433,12 @@
             <group>
                 <name>App</name>
                 <file>
+                    <name>$PROJ_DIR$\..\App\com_interface.cpp</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\App\com_interface.hpp</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\App\pwm_controller.cpp</name>
                 </file>
                 <file>
@@ -1443,6 +1449,15 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\App\pwm_generator.hpp</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\App\pwm_os_tasks.cpp</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\App\pwm_os_tasks.hpp</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\App\pwm_types.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\App\signal_generator.cpp</name>
@@ -1485,6 +1500,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\tim.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\usart.c</name>
                 </file>
             </group>
         </group>
@@ -1555,6 +1573,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_adc.c</name>

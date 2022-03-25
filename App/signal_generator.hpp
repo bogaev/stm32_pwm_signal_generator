@@ -2,31 +2,30 @@
 #define _SIGNAL_GENERATOR_H_
 
 #include "main.h"
+#include "pwm_types.h"
 #include <cmath>
 
-const uint16_t SIGNAL_MAX_SIZE = (1<<13); //8192
-const uint16_t SIGNAL_MIN_SAMPLE_RATE = 128;
-const uint16_t SIGNAL_MAX_SAMPLE_RATE = SIGNAL_MAX_SIZE;
-const uint32_t DATA_BUFFER_SIZE = SIGNAL_MAX_SIZE*2;
+const uint16_t HALFWAVE_MAX_SIZE = (1<<13); //8192
+const uint16_t POINTS_PER_HW_MIN = 128;
+const uint16_t POINTS_PER_HW_MAX = HALFWAVE_MAX_SIZE;
+const uint32_t DATA_BUFFER_SIZE = HALFWAVE_MAX_SIZE*2;
+//const float MAX_FREQ_COUNT = POINTS_PER_HW_MAX / POINTS_PER_HW_MIN;
+const float MAX_FREQ_COUNT = 51;
 const float pi = std::acos(-1);
 
-typedef enum tdSignalTypes_ {
-  SIGNAL_TYPE_SINUS = 0,
-  SIGNAL_TYPE_CONST
-} tdSignalTypes;
-
 struct tdSignalParams {
-  tdSignalTypes signal_type = SIGNAL_TYPE_SINUS;
-  float freq = (float)(SIGNAL_MAX_SAMPLE_RATE / SIGNAL_MIN_SAMPLE_RATE);
+  uint8_t signal_type = (uint8_t)SIGNAL_TYPE_SINUS;
+  float amp = 1.0f;
+  float freq = MAX_FREQ_COUNT;
   
-  inline float phaseDelta() const {
-    return 1.0f / (float)SIGNAL_MAX_SIZE;
+  inline float timeDelta() const {
+    return 1.0f / (float)HALFWAVE_MAX_SIZE;
   }
 };
 
 class SignalGenerator {
   tdSignalParams p;
-  uint32_t phase = 0;
+  uint32_t time = 0;
   uint16_t f = 1;
   uint16_t f_buf = 1;
   
@@ -36,49 +35,37 @@ public:
   float getNext();
   float generateNextSinus(const SignalGenerator* freq_mod = nullptr);
 
-  inline uint16_t* getFreqPtr() {
-    return &f;
+  inline float* getAmpPtr() {
+    return (float*)&p.amp;
   }
-  
-  inline uint32_t getPhase() const {
-    return phase;
+  inline float* getFreqPtr() {
+    return (float*)&p.freq;
   }
-  
-  inline void setFreq(float freq) {
-    p.freq = freq;
+  inline uint32_t getTime() const {
+    return time;
   }
+
+  void setParam(uint8_t param, uint16_t value);
   
   SignalGenerator& operator^(SignalGenerator* freq_mod) {
-    if(f == f_buf) {
-      f_buf = (int) (p.freq * (1.f - (freq_mod->getNext() * 0.98f)));
+    if(freq_mod->getNext() != -1.f) {
+      if(f == f_buf) {
+        f_buf = (int) (p.freq * (1.f - (freq_mod->getNext() * 0.98f)));
+      }
     }
     return *this;
   }
   
   float operator*(SignalGenerator* amp_mod) {
-    return getNext() * amp_mod->getNext();
+    if(amp_mod->getNext() != -1.f) {
+      return getNext() * amp_mod->getNext();
+    }
+    return getNext();
   }
   
 private:
-  inline void phaseStep() {
-    ++phase;
-    if(phase % getEvenHalfwavesCount() == 0) { 
-      phase = 0;
-      if(f != f_buf) {
-        f = f_buf;
-      }
-    }
-  }
-  
-  uint16_t getEvenHalfwavesCount() {
-    uint16_t even_periods = f;
-    if ((even_periods > 1U)
-         && (((uint16_t)even_periods % 2U) != 0U)
-        ) {
-      --even_periods;
-    }
-    return ((SIGNAL_MAX_SIZE / f) * even_periods);
-  }
+  void timeStep();
+  uint16_t getEvenHalfwavesCount();
 };
 
 #endif // #ifndef _SIGNAL_GENERATOR_H_

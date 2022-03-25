@@ -25,6 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "App/pwm_types.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,14 +51,33 @@ osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for GenNextHalfwave */
-osThreadId_t GenNextHalfwaveHandle;
-const osThreadAttr_t GenNextHalfwave_attributes = {
-  .name = "GenNextHalfwave",
+/* Definitions for GenHalfwave */
+osThreadId_t GenHalfwaveHandle;
+const osThreadAttr_t GenHalfwave_attributes = {
+  .name = "GenHalfwave",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for ChngSignalParam */
+osThreadId_t ChngSignalParamHandle;
+const osThreadAttr_t ChngSignalParam_attributes = {
+  .name = "ChngSignalParam",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityHigh,
+};
+/* Definitions for Gen_IT_wave */
+osThreadId_t Gen_IT_waveHandle;
+const osThreadAttr_t Gen_IT_wave_attributes = {
+  .name = "Gen_IT_wave",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for SignalGeneratorQueue */
+osMessageQueueId_t SignalGeneratorQueueHandle;
+const osMessageQueueAttr_t SignalGeneratorQueue_attributes = {
+  .name = "SignalGeneratorQueue"
 };
 /* Definitions for GenerateHalfWaveSemaphore */
 osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
@@ -71,7 +91,9 @@ const osSemaphoreAttr_t GenerateHalfWaveSemaphore_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
-void GenNextHalfwaveTask(void *argument);
+void GenerateHalfwaveTask(void *argument);
+void ChangeSignalParamsTask(void *argument);
+void Generate_IT_wave(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -101,6 +123,10 @@ void MX_FREERTOS_Init(void) {
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of SignalGeneratorQueue */
+  SignalGeneratorQueueHandle = osMessageQueueNew (8, sizeof(tdPwmData), &SignalGeneratorQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -109,8 +135,14 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
-  /* creation of GenNextHalfwave */
-  GenNextHalfwaveHandle = osThreadNew(GenNextHalfwaveTask, NULL, &GenNextHalfwave_attributes);
+  /* creation of GenHalfwave */
+  GenHalfwaveHandle = osThreadNew(GenerateHalfwaveTask, NULL, &GenHalfwave_attributes);
+
+  /* creation of ChngSignalParam */
+  ChngSignalParamHandle = osThreadNew(ChangeSignalParamsTask, NULL, &ChngSignalParam_attributes);
+
+  /* creation of Gen_IT_wave */
+  Gen_IT_waveHandle = osThreadNew(Generate_IT_wave, NULL, &Gen_IT_wave_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -139,22 +171,58 @@ __weak void StartDefaultTask(void *argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_GenNextHalfwaveTask */
+/* USER CODE BEGIN Header_GenerateHalfwaveTask */
 /**
-* @brief Function implementing the GenNextHalfwave thread.
+* @brief Function implementing the GenHalfwave thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_GenNextHalfwaveTask */
-__weak void GenNextHalfwaveTask(void *argument)
+/* USER CODE END Header_GenerateHalfwaveTask */
+__weak void GenerateHalfwaveTask(void *argument)
 {
-  /* USER CODE BEGIN GenNextHalfwaveTask */
+  /* USER CODE BEGIN GenerateHalfwaveTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END GenNextHalfwaveTask */
+  /* USER CODE END GenerateHalfwaveTask */
+}
+
+/* USER CODE BEGIN Header_ChangeSignalParamsTask */
+/**
+* @brief Function implementing the ChngSignalParam thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ChangeSignalParamsTask */
+__weak void ChangeSignalParamsTask(void *argument)
+{
+  /* USER CODE BEGIN ChangeSignalParamsTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ChangeSignalParamsTask */
+}
+
+/* USER CODE BEGIN Header_Generate_IT_wave */
+/**
+* @brief Function implementing the Gen_IT_wave thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Generate_IT_wave */
+__weak void Generate_IT_wave(void *argument)
+{
+  /* USER CODE BEGIN Generate_IT_wave */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Generate_IT_wave */
 }
 
 /* Private application code --------------------------------------------------*/
