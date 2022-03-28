@@ -8,6 +8,8 @@
 *.dep
 *.wsdt
 *.rar
+*.out
+*.sim
 
 # User-specific files
 *.rsuser

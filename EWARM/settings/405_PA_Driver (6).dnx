@@ -12,19 +12,19 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <StLinkDriver>
-        <stlinkserialNo>53FF6E064980555729541587</stlinkserialNo>
-        <stlinkfoundProbes />
-        <stlinkResetStyle>0</stlinkResetStyle>
-        <stlinkResetStrategy>2</stlinkResetStrategy>
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+        <stlinkResetStyle>0</stlinkResetStyle>
+        <stlinkResetStrategy>2</stlinkResetStrategy>
+        <stlinkserialNo>53FF6E064980555729541587</stlinkserialNo>
+        <stlinkfoundProbes />
     </StLinkDriver>
     <Trace1>
         <Enabled>0</Enabled>
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>897699108</Checksum>
+        <Checksum>3761777293</Checksum>
     </DebugChecksum>
     <Disassembly>
         <MixedMode>1</MixedMode>
@@ -119,15 +119,25 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\App\pwm_os_tasks.cpp}.68.7" 0 0 1 "" 0 "" 0</Bp0>
+        <Count>1</Count>
+    </Breakpoints2>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
         <Category>_ 0</Category>
     </LogFile>
+    <Aliases>
+        <A0>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Core\Src\main.c" ""</A0>
+        <A1>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c" ""</A1>
+        <A2>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c" ""</A2>
+        <Count>3</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>3</Mode>
@@ -141,18 +151,8 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
-    <DisassembleMode>
-        <mode>0</mode>
-    </DisassembleMode>
-    <Breakpoints2>
-        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\App\pwm_os_tasks.cpp}.68.7" 0 0 1 "" 0 "" 0</Bp0>
-        <Count>1</Count>
-    </Breakpoints2>
-    <Aliases>
-        <A0>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Core\Src\main.c" ""</A0>
-        <A1>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c" ""</A1>
-        <A2>_ "C:\Users\Sergey\YandexDisk\Work\Projects\Neurolimp\Software\405_PA_Driver_IAR\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c" ""</A2>
-        <Count>3</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
 </settings>
