@@ -18,22 +18,22 @@ const float amp_coeff[3][2] = {
   {0.45f, 1.7f}
 };
 
-#define AMP_GAIN amp_coeff[(int)*a-1][0]
-#define FREQ_SLOPE amp_coeff[(int)*a-1][1]
+#define AMP_GAIN amp_coeff[(int)*amp-1][0]
+#define FREQ_SLOPE amp_coeff[(int)*amp-1][1]
 
 struct tdDutyCycle {
   float cmin;
   float cmax;
   float timer_period;
-  float* freq = nullptr;
-  float* a = nullptr;
+  uint16_t* freq = nullptr;
+  uint16_t* amp = nullptr;
   float freq_slope = 0.15f;
   
   inline float freq_corr(float slope) const {
     return (*freq / MAX_FREQ_COUNT) * slope + (1.f - slope);
   }
   inline float amp_corr() const {
-    return *a * AMP_GAIN + (1.f - AMP_GAIN) * freq_corr(FREQ_SLOPE);
+    return *amp * AMP_GAIN + (1.f - AMP_GAIN) * freq_corr(FREQ_SLOPE);
   }
   inline float min() const {
     return cmin * freq_corr(freq_slope);
@@ -64,14 +64,8 @@ public:
     void generateNextHalfbuffer();
     
 private:
-    inline void zeroCrossingCheck() {
-      uint16_t value = 
-        carrier->getTime() % (uint16_t)((float)HALFWAVE_MAX_SIZE / *(dutyCycle_.freq));
-      if(value == 0) {
-        is_negative_halfwave = !is_negative_halfwave;
-      }
-    }
-
+    inline void zeroCrossingCheck();
+    void reset();
 };
 
 #endif // #ifndef _PWM_GENERATOR_H_

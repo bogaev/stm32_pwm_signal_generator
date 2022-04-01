@@ -67,10 +67,10 @@ void InitPwmControllers() {
   static uint16_t dma_negative[DATA_BUFFER_SIZE] = {0};
   static tdDataBuffers dma_buffers = { {dma_positive, dma_negative} };
   
-  static SignalGenerator carrier({SIGNAL_TYPE_SINUS, 1.0f, 51.0f});
+  static SignalGenerator carrier({SIGNAL_TYPE_SINUS, 1});
   static SignalGenerator amp_mod({SIGNAL_TYPE_NONE});
 //  static SignalGenerator amp_mod({SIGNAL_TYPE_SINUS});
-//  static SignalGenerator freq_mod({SIGNAL_TYPE_NONE});
+//  static SignalGenerator freq_mod({SIGNAL_TYPE_SINUS, 1.0f, 1.0f});
   static SignalGenerator freq_mod({SIGNAL_TYPE_NONE});
   SignalGenerator* params[] = {&carrier, &amp_mod, &freq_mod};
   
