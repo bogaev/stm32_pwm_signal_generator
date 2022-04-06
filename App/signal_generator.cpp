@@ -1,14 +1,13 @@
 #include "signal_generator.hpp"
 #include <assert.h>
+#include <cmath>
 
 SignalGenerator::SignalGenerator(tdSignalParams params)
   : p(params)
 {
   assert(p.freq >= 1.f);
   assert(p.freq <= POINTS_PER_HW_MAX / POINTS_PER_HW_MIN);
-//  assert(p.amp <= 1.0f && p.amp > 0.0f);
-  f = (uint16_t)p.freq;
-  f_buf = f;
+  resetSignal();
 }
 
 float SignalGenerator::getNext() {
@@ -33,29 +32,40 @@ float SignalGenerator::getNext() {
 }
 
 float SignalGenerator::generateSinus() {
-  float value = std::abs(p.amp * sin(pi * (float)f * p.timeDelta() * (float)time));
+  float value = std::abs(p.amp * sin(pi * f * ampStep() * time));
   timeStep();
   return value;
 }
 
 float SignalGenerator::generateMeandr() {
-  float value = std::abs((time % f * p.timeDelta()) - p.amp);
+  float value = std::abs(time % f * ampStep() - p.amp);
   timeStep();
   return value;
 }
 
 float SignalGenerator::generateTriangle() {
-  float value = std::abs(time * p.timeDelta() * p.amp + sign * amp) * 2.f;
-  toggleSign(2);
+  float value = std::abs((time % period())
+                            * ampStep() * p.amp
+                                + sign * amp) * 2;
   timeStep();
+  checkSign(2);
   return value;
 }
 
 float SignalGenerator::generateSaw() {
-  float value = std::abs(time * p.timeDelta() * p.amp + sign * amp);
-  toggleSign(1);
+  float value = std::abs((time % period())
+                            * ampStep() * p.amp
+                                + sign * amp);
   timeStep();
+  checkSign(1);
   return value;
+}
+
+void SignalGenerator::checkSign(uint16_t dev) {
+  if((time % (int)(ceil((float)period() / (float)dev))) == 0) {
+    sign *= -1;
+    amp = (sign > 0 ? 0 : p.amp);
+  }
 }
 
 void SignalGenerator::timeStep() {
@@ -67,19 +77,32 @@ void SignalGenerator::timeStep() {
     }
   }
 }
-  
+
 uint16_t SignalGenerator::getEvenHalfwavesSize() {
-  uint16_t even_periods = (uint16_t)f;
+  uint16_t even_periods = f;
   if ((even_periods > 1U)
        && (((uint16_t)even_periods % 2U) != 0U)
       ) {
     --even_periods;
   }
-  return ((HALFWAVE_MAX_SIZE / (uint16_t)f) * even_periods);
+  return ((HALFWAVE_MAX_SIZE / f) * even_periods);
+}
+
+uint16_t SignalGenerator::period() {
+  return HALFWAVE_MAX_SIZE / f;
+}
+
+float SignalGenerator::ampStep() {
+  if(p.signal_type == SIGNAL_TYPE_SINUS
+     || p.signal_type == SIGNAL_TYPE_MEANDR) {
+        return 1.f / (float)HALFWAVE_MAX_SIZE;
+     } 
+  else {
+        return 1.f / (float)period();
+  }
 }
 
 void SignalGenerator::setParam(uint8_t param, uint16_t value) {
-  resetSignal();
   if(param == (uint8_t)UART_PARAM_SIGNAL_TYPE) {
     p.signal_type = value;
   }
@@ -88,22 +111,23 @@ void SignalGenerator::setParam(uint8_t param, uint16_t value) {
   }
   else if(param == (uint8_t)UART_PARAM_FREQ) {
     p.freq = value;
-//    f_buf = (uint16_t)p.freq;
-//    f = f_buf;
   }
-}
-
-void SignalGenerator::toggleSign(uint8_t dev) {
-  if(time % (getEvenHalfwavesSize() / f / dev) == 0) {
-    sign *= -1;
-    amp = (sign > 0 ? 0 : p.amp);
-  }
+  resetSignal();
 }
 
 void SignalGenerator::resetSignal() {
-  sign = -1;
-  amp = 1;
+  (p.signal_type == SIGNAL_TYPE_TRIANGLE) ? initTriangle() : initDefault();
   f_buf = (uint16_t)p.freq;
   f = f_buf;
   time = 0;
+}
+
+void SignalGenerator::initTriangle() {
+  sign = 1;
+  amp = 0;
+}
+
+void SignalGenerator::initDefault() {
+  sign = -1;
+  amp = 1;
 }

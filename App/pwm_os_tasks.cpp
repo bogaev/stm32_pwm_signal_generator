@@ -4,6 +4,7 @@
 #include "tim.h"
 
 extern osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
+extern osMutexId_t MutexChangeParamsHandle;
 extern osMessageQueueId_t SignalGeneratorQueueHandle;
 extern UART_HandleTypeDef huart5;
 extern Uart uart;
@@ -34,6 +35,7 @@ void GenerateHalfwaveTask(void *argument) {
   /* Infinite loop */
   for(;;) {
     osSemaphoreAcquire(GenerateHalfWaveSemaphoreHandle, portMAX_DELAY);
+    osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
     pwm[TIM1_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
 //    pwm[TIM2_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
 //    pwm[TIM2_CH34_IT]->isStarted() ? pwm[TIM2_CH34_IT]->nextValueFromBuffer() : (void)0U;
@@ -43,6 +45,7 @@ void GenerateHalfwaveTask(void *argument) {
 ////    pwm[TIM4_CH34_IT]->isStarted() ?  pwm[TIM4_CH34_IT]->nextValueFromBuffer() : (void)0U;
 //    pwm[TIM8_CH12_IT]->isStarted() ?  pwm[TIM8_CH12_IT]->nextValueFromBuffer() : (void)0U;
 //    pwm[TIM12_CH12_IT]->isStarted() ? pwm[TIM12_CH12_IT]->nextValueFromBuffer() : (void)0U;
+    osMutexRelease(MutexChangeParamsHandle);
   }
 }
 
@@ -84,7 +87,9 @@ void ChangeSignalParamsTask(void *argument)
     // wait for message
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
     if (status == osOK) {
+      osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
       pwm[msg.emitter]->setPWM(msg.signal, msg.param, msg.value);
+      osMutexRelease(MutexChangeParamsHandle);
     }
     else {
       Error_Handler();

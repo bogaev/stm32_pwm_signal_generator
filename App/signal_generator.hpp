@@ -13,13 +13,9 @@ const uint16_t MAX_FREQ_COUNT = POINTS_PER_HW_MAX / POINTS_PER_HW_MIN;
 const float pi = std::acos(-1);
 
 struct tdSignalParams {
-  uint8_t signal_type = (uint8_t)SIGNAL_TYPE_SINUS;
+  uint16_t signal_type = (uint8_t)SIGNAL_TYPE_SINUS;
   uint16_t amp = 1;
   uint16_t freq = MAX_FREQ_COUNT;
-  
-  inline float timeDelta() const {
-    return 1.0f / (float)HALFWAVE_MAX_SIZE;
-  }
 };
 
 class SignalGenerator {
@@ -38,17 +34,14 @@ public:
   float generateMeandr();
   float generateTriangle();
   float generateSaw();
+  void initTriangle();
+  void initDefault();
 
   inline uint16_t* getAmpPtr() {
     return &p.amp;
   }
   inline uint16_t* getFreqPtr() {
     return &f;
-  }
-  inline void switchFreq() {
-    if(f != f_buf) {
-      f = f_buf;
-    }
   }
   inline uint32_t getTime() const {
     return time;
@@ -77,8 +70,10 @@ public:
   
 private:
   void timeStep();
+  float ampStep();
   uint16_t getEvenHalfwavesSize();
-  inline void toggleSign(uint8_t dev);
+  uint16_t period();
+  inline void checkSign(uint16_t dev);
   inline void resetSignal();
 };
 

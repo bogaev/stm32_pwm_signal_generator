@@ -79,6 +79,11 @@ osMessageQueueId_t SignalGeneratorQueueHandle;
 const osMessageQueueAttr_t SignalGeneratorQueue_attributes = {
   .name = "SignalGeneratorQueue"
 };
+/* Definitions for MutexChangeParams */
+osMutexId_t MutexChangeParamsHandle;
+const osMutexAttr_t MutexChangeParams_attributes = {
+  .name = "MutexChangeParams"
+};
 /* Definitions for GenerateHalfWaveSemaphore */
 osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
 const osSemaphoreAttr_t GenerateHalfWaveSemaphore_attributes = {
@@ -106,6 +111,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of MutexChangeParams */
+  MutexChangeParamsHandle = osMutexNew(&MutexChangeParams_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
