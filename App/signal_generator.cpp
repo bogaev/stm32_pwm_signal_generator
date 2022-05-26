@@ -78,6 +78,13 @@ void SignalGenerator::timeStep() {
   }
 }
 
+bool SignalGenerator::zeroCrossingCheck() {
+  if(time % period() == 0) { 
+    return true;
+  }
+  return false;
+}
+
 uint16_t SignalGenerator::getEvenHalfwavesSize() {
   uint16_t even_periods = f;
   if ((even_periods > 1U)

@@ -4,15 +4,15 @@
 #include "pwm_generator.hpp"
 
 typedef enum enPWM_Timers_ {
-  TIM1_CH12_DMA = 0,
-  TIM2_CH12_DMA,
-  TIM2_CH34_IT,
-  TIM3_CH12_IT,
-  TIM3_CH34_DMA,
-  TIM4_CH12_DMA,
-  TIM4_CH34_IT,
-  TIM8_CH12_IT,
-  TIM12_CH12_IT,
+  TIM1_CH_1_2_DMA = 0,
+  TIM2_CH_1_2_DMA,
+  TIM2_CH_3_4_IT,
+  TIM3_CH_1_2_IT,
+  TIM3_CH_3_4_DMA,
+  TIM4_CH_1_2_DMA,
+  TIM4_CH_34_IT_RESERVE,
+  TIM8_CH_1_2_IT,
+  TIM12_CH_1_2_IT,
   PWM_NUM
 } enPWM_Timers;
 

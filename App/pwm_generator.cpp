@@ -56,9 +56,7 @@ void PwmGenerator::setSignal(uint8_t signal, uint8_t param, uint16_t value) {
 }
 
 void PwmGenerator::zeroCrossingCheck() {
-  uint16_t value = 
-    carrier->getTime() % (uint16_t)(HALFWAVE_MAX_SIZE / *(dutyCycle_.freq));
-  if(value == 0) {
+  if(carrier->zeroCrossingCheck()) {
     is_negative_halfwave = !is_negative_halfwave;
   }
 }

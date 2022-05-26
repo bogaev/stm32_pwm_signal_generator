@@ -36,30 +36,30 @@ void GenerateHalfwaveTask(void *argument) {
   for(;;) {
     osSemaphoreAcquire(GenerateHalfWaveSemaphoreHandle, portMAX_DELAY);
     osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
-    pwm[TIM1_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH34_IT]->isStarted() ? pwm[TIM2_CH34_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH12_IT]->isStarted() ? pwm[TIM3_CH12_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH34_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM4_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM4_CH34_IT]->isStarted() ?  pwm[TIM4_CH34_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM8_CH12_IT]->isStarted() ?  pwm[TIM8_CH12_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM12_CH12_IT]->isStarted() ? pwm[TIM12_CH12_IT]->nextValueFromBuffer() : (void)0U;
+    pwm[TIM1_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM2_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM2_CH_3_4_IT]->isStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_1_2_IT]->isStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_3_4_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM4_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+////    pwm[TIM4_CH_3_4_IT]->isStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM8_CH_1_2_IT]->isStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM12_CH_1_2_IT]->isStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
     osMutexRelease(MutexChangeParamsHandle);
   }
 }
 
 void Generate_IT_wave(void *argument) {
   for(;;) {
-////    pwm[TIM1_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM2_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH34_IT]->isStarted() ? pwm[TIM2_CH34_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH12_IT]->isStarted() ? pwm[TIM3_CH12_IT]->nextValueFromBuffer() : (void)0U;
-////    pwm[TIM3_CH34_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM4_CH12_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//////    pwm[TIM4_CH34_IT]->isStarted() ?  pwm[TIM4_CH34_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM8_CH12_IT]->isStarted() ?  pwm[TIM8_CH12_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM12_CH12_IT]->isStarted() ? pwm[TIM12_CH12_IT]->nextValueFromBuffer() : (void)0U;
+////    pwm[TIM1_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+////    pwm[TIM2_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM2_CH_3_4_IT]->isStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_1_2_IT]->isStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_3_4_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM4_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//////    pwm[TIM4_CH_3_4_IT]->isStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM8_CH_1_2_IT]->isStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM12_CH_1_2_IT]->isStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
   }
 }
 

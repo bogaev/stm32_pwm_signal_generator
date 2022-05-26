@@ -13,11 +13,11 @@ typedef enum enPwmSignals_ {
 } enPwmSignals;
 
 typedef enum tdSignalTypes_ {
-  SIGNAL_TYPE_SINUS = 0,
+  SIGNAL_TYPE_NONE = 0,
+  SIGNAL_TYPE_SINUS,
   SIGNAL_TYPE_MEANDR,
   SIGNAL_TYPE_TRIANGLE,
   SIGNAL_TYPE_SAW,
-  SIGNAL_TYPE_NONE,
   SIGNAL_TYPE_NUM
 } tdSignalTypes;
 

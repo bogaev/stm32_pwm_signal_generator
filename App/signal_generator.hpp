@@ -36,6 +36,7 @@ public:
   float generateSaw();
   void initTriangle();
   void initDefault();
+  bool zeroCrossingCheck();
 
   inline uint16_t* getAmpPtr() {
     return &p.amp;
@@ -68,6 +69,7 @@ public:
     return getNext();
   }
   
+
 private:
   void timeStep();
   float ampStep();
