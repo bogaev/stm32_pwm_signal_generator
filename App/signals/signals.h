@@ -1,23 +1,24 @@
 #ifndef _SIGNALS_H_
 #define _SIGNALS_H_
 
-class Signal {
+#include "signal_interface.h"
+
+class Sinus : public Signal {
 public:
-  template<typename T>
-  T& SetFreq(freq) {
-    freq_ = freq;
-    return *this;
+  float operator()(uint32_t time) const override {
+    return amp_ * std::sin(pi * freq_ * time);
   }
   
-  template<typename T>
-  T& SetAmp(amp) {
-    amp_ = amp;
-    return *this;
+  float FM(uint32_t time, Signal& fmod) const override {
+    return amp_ * std::sin(pi * freq_ * time + fmod.getIntegral(time));
   }
-    
+  
+  float getIntegral(uint32_t time) const override {
+      return amp_ * std::cos(pi * freq_ * time);
+  }
+  
 private:
-  float freq_ = 1;
-  float amp_ = 1;
+  
 };
 
 #endif // #ifndef _SIGNALS_H_

@@ -376,3 +376,5 @@ FodyWeavers.xsd
 *.xcl
 EWARM/settings
 EWARM/405_PA_Driver
+App/signal_generator/signal_generator_old.cpp
+App/signal_generator/signal_generator_old.hpp

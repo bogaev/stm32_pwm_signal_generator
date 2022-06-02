@@ -4,7 +4,7 @@
 #include "main.h"
 #include <cmath>
 
-#include "signal_generator.hpp"
+#include "App/signal_generator/signal_generator.h"
 
 const float TIMER_PERIOD = 656.f;
 
@@ -47,16 +47,15 @@ struct tdDutyCycle {
 };
 
 class PwmGenerator {
-    SignalGenerator* carrier = nullptr;
-    SignalGenerator* amp_mod = nullptr;
-    SignalGenerator* freq_mod = nullptr;
+    SignalGenerator& generator_;
     tdDataBuffers& buffers_;
     tdDutyCycle dutyCycle_;
     uint8_t is_negative_halfwave = 0;
     uint32_t buffer_index = 0;
     
 public:
-    PwmGenerator(SignalGenerator* params[], tdDutyCycle dutyCycle, tdDataBuffers& buffers);
+    PwmGenerator(SignalGenerator& generator,
+                  const tdDutyCycle dutyCycle, tdDataBuffers& buffers);
     void setSignal(uint8_t signal, uint8_t param, uint16_t value);
     float getNext();
     inline uint16_t getDutyCycle();

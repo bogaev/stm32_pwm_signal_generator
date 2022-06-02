@@ -67,14 +67,12 @@ void InitPwmControllers() {
   static uint16_t dma_negative[DATA_BUFFER_SIZE] = {0};
   static tdDataBuffers dma_buffers = { {dma_positive, dma_negative} };
   
-  static SignalGenerator carrier({SIGNAL_TYPE_SINUS, 1});
-  static SignalGenerator amp_mod({SIGNAL_TYPE_NONE});
-//  static SignalGenerator amp_mod({SIGNAL_TYPE_SINUS});
-//  static SignalGenerator freq_mod({SIGNAL_TYPE_SINUS, 1.0f, 1.0f});
-  static SignalGenerator freq_mod({SIGNAL_TYPE_NONE});
-  SignalGenerator* params[] = {&carrier, &amp_mod, &freq_mod};
+  static Sinus carrier;
+  static Sinus f_sin;
+  static Sinus a_sin;
+  static SignalGenerator generator(&carrier, &f_sin, &a_sin);
   
-  static PwmGenerator pwm_signal(params, 
+  static PwmGenerator pwm_signal(generator, 
                                  {DUTY_CYCLE_MIN, DUTY_CYCLE_MAX, TIMER_PERIOD},
                                  dma_buffers);
   pwmGenerator = &pwm_signal;
