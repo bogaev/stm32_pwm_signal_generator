@@ -1,28 +1,26 @@
 #include "pwm_generator.hpp"
 
-PwmGenerator::PwmGenerator(SignalGenerator& generator,
+PwmGenerator::PwmGenerator(SignalGenerator& sig_generator,
                            const tdDutyCycle dutyCycle, tdDataBuffers& buffers) 
-  : generator_(generator),
+  : sig_generator_(sig_generator),
     dutyCycle_(dutyCycle),
     buffers_(buffers)
 {
   dutyCycle_.timer_period = dutyCycle.timer_period;
   dutyCycle_.cmin = dutyCycle.cmin / 100.f * dutyCycle.timer_period;
   dutyCycle_.cmax = dutyCycle.cmax / 100.f * dutyCycle.timer_period;
-//  dutyCycle_.amp = carrier->getAmpPtr();
-//  dutyCycle_.freq = carrier->getFreqPtr();
+  dutyCycle_.amp = sig_generator.carrier_->GetAmp();
+  dutyCycle_.freq = sig_generator.carrier_->GetFreq();
   generateNextHalfbuffer();
   generateNextHalfbuffer();
-}
-
-float PwmGenerator::getNext() {
-  return generator_();
 }
 
 uint16_t PwmGenerator::getDutyCycle() {
+  float value = sig_generator_();
   uint16_t dc = 
-    (uint16_t)(dutyCycle_.min() + dutyCycle_.range() * dutyCycle_.amp_corr() * getNext());
-  zeroCrossingCheck();
+    (uint16_t)(dutyCycle_.min() + dutyCycle_.range() * dutyCycle_.amp_corr() 
+               * sig_generator_());
+  zeroCrossingCheck(value);
   return dc;
 }
 
@@ -42,22 +40,12 @@ void PwmGenerator::generateNextHalfbuffer() {
 }
 
 void PwmGenerator::setSignal(uint8_t signal, uint8_t param, uint16_t value) {
-//  reset();
-//  if(signal == (uint8_t)UART_SIGNAL_CARRIER) {
-//    carrier->setParam(param, value);
-//  }
-//  else if(signal == (uint8_t)UART_SIGNAL_AMP_MOD) {
-//    amp_mod->setParam(param, value);
-//  }
-//  else if(signal == (uint8_t)UART_SIGNAL_FREQ_MOD) {
-//    freq_mod->setParam(param,value);
-//  }
+  reset();
+  sig_generator_.setSignal(signal, param, value);
 }
 
-void PwmGenerator::zeroCrossingCheck() {
-//  if(carrier->zeroCrossingCheck()) {
-//    is_negative_halfwave = !is_negative_halfwave;
-//  }
+void PwmGenerator::zeroCrossingCheck(float value) {
+  value > 0 ? is_negative_halfwave = false : is_negative_halfwave = true;
 }
 
 void PwmGenerator::reset() {

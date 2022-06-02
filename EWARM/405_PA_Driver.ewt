@@ -1435,9 +1435,6 @@
                 <group>
                     <name>signal_generator</name>
                     <file>
-                        <name>$PROJ_DIR$\..\App\signal_generator\signal_generator.cpp</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\App\signal_generator\signal_generator.h</name>
                     </file>
                     <file>
@@ -1446,17 +1443,11 @@
                     <file>
                         <name>$PROJ_DIR$\..\App\signal_generator\signal_generator_old.hpp</name>
                     </file>
-                </group>
-                <group>
-                    <name>signals</name>
                     <file>
-                        <name>$PROJ_DIR$\..\App\signals\integrator.h</name>
+                        <name>$PROJ_DIR$\..\App\signal_generator\signal_interface.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\App\signals\signal_interface.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\App\signals\signals.h</name>
+                        <name>$PROJ_DIR$\..\App\signal_generator\signals.h</name>
                     </file>
                 </group>
                 <file>
