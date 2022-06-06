@@ -16,14 +16,24 @@ const uint16_t MAX_FREQ_COUNT = POINTS_PER_HW_MAX / POINTS_PER_HW_MIN;
 
 class SignalGenerator {  
 public:
-  SignalGenerator() {
-    carrier_ = Signal{}.Create(SIGNAL_TYPE_SINUS);
-    fmod_ = Signal{}.Create(SIGNAL_TYPE_SINUS);
-    amod_ = Signal{}.Create(SIGNAL_TYPE_SINUS);
-  }
+  SignalGenerator() :
+    carrier_(Signal{}.Create(SIGNAL_TYPE_SINUS)),
+    fmod_(Signal{}.Create(SIGNAL_TYPE_NONE)),
+    amod_(Signal{}.Create(SIGNAL_TYPE_NONE))
+    {}
+  
+  explicit SignalGenerator(tdSignalTypes_ carrier,
+                           tdSignalTypes_ fmod = SIGNAL_TYPE_NONE,
+                           tdSignalTypes_ amod = SIGNAL_TYPE_NONE)
+    :
+      carrier_(Signal{}.Create(carrier)),
+      fmod_(Signal{}.Create(fmod)),
+      amod_(Signal{}.Create(amod))
+      {}
+  
   explicit SignalGenerator(std::shared_ptr<Signal> carrier, 
-                           std::shared_ptr<Signal> fmod,
-                           std::shared_ptr<Signal> amod)
+                           std::shared_ptr<Signal> fmod = nullptr,
+                           std::shared_ptr<Signal> amod = nullptr)
     : carrier_(carrier),
       fmod_(fmod),
       amod_(amod)
