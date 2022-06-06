@@ -16,22 +16,27 @@ const uint16_t MAX_FREQ_COUNT = POINTS_PER_HW_MAX / POINTS_PER_HW_MIN;
 
 class SignalGenerator {  
 public:
-  explicit SignalGenerator(std::unique_ptr<Signal> carrier, 
-                           std::unique_ptr<Signal> fmod,
-                           std::unique_ptr<Signal> amod)
+  SignalGenerator() {
+    carrier_ = Signal{}.Create(SIGNAL_TYPE_SINUS);
+    fmod_ = Signal{}.Create(SIGNAL_TYPE_SINUS);
+    amod_ = Signal{}.Create(SIGNAL_TYPE_SINUS);
+  }
+  explicit SignalGenerator(std::shared_ptr<Signal> carrier, 
+                           std::shared_ptr<Signal> fmod,
+                           std::shared_ptr<Signal> amod)
     : carrier_(carrier),
       fmod_(fmod),
       amod_(amod)
     {}
   
   float operator()() {
-    if(!fmod_->is_virtual() && !amod_->is_virtual()) {
+    if(fmod_ && amod_) {
       GenerateFM().AddAM();
     }
-    else if(!fmod_->is_virtual()) {
+    else if(fmod_) {
       GenerateFM();
     }
-    else if(!amod_->is_virtual()) {
+    else if(amod_) {
       GenerateCarrier().AddAM();
     }
     else {
@@ -41,17 +46,23 @@ public:
   }
 
   SignalGenerator& GenerateCarrier() {
-    value_ = (*carrier_)(time_);
+    if(carrier_) {
+      value_ = (*carrier_)(time_);
+    }
     return *this;
   }  
 
   SignalGenerator& AddAM() {
-    value_ *= (*amod_)(time_);
+    if(amod_) {
+      value_ *= (*amod_)(time_);
+    }
     return *this;
   }  
   
   SignalGenerator& GenerateFM() {
-    value_ = (*carrier_).FM(time_, *fmod_);
+    if(fmod_) {
+      value_ = (*carrier_).FM(time_, *fmod_);
+    }
     return *this;
   }
   
@@ -68,18 +79,17 @@ public:
     }
   }
 
-public:  
-  std::unique_ptr<Signal> carrier_;
-  std::unique_ptr<Signal> amod_;
-  std::unique_ptr<Signal> fmod_;
+  std::shared_ptr<Signal> carrier_{};
+  std::shared_ptr<Signal> amod_{};
+  std::shared_ptr<Signal> fmod_{};
   
-private:
+private:  
+  
   void reset() {
     time_ = 0;
     value_ = 0;
   }
   
-private:
   float value_ = 0;
   uint32_t time_ = 0;
 };

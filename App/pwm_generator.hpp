@@ -59,7 +59,6 @@ private:
   inline void zeroCrossingCheck(float value);
   void reset();
   
-private:
   SignalGenerator& sig_generator_;
   tdDataBuffers& buffers_;
   tdDutyCycle dutyCycle_;

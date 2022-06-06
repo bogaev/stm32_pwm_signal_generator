@@ -67,10 +67,7 @@ void InitPwmControllers() {
   static uint16_t dma_negative[DATA_BUFFER_SIZE] = {0};
   static tdDataBuffers dma_buffers = { {dma_positive, dma_negative} };
     
-//  auto carrier = std::make_unique<Sinus>();
-//  auto f_sin = std::make_unique<Sinus>();
-//  auto a_sin = std::make_unique<Sinus>();
-  static SignalGenerator generator(std::make_unique<Sinus>(), std::make_unique<Sinus>(), std::make_unique<Sinus>());
+  static SignalGenerator generator;
   
   static PwmGenerator pwm_signal(generator, 
                                  {DUTY_CYCLE_MIN, DUTY_CYCLE_MAX, TIMER_PERIOD},

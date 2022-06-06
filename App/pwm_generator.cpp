@@ -16,11 +16,11 @@ PwmGenerator::PwmGenerator(SignalGenerator& sig_generator,
 }
 
 uint16_t PwmGenerator::getDutyCycle() {
-  float value = sig_generator_();
+  float sig_value = sig_generator_();
   uint16_t dc = 
     (uint16_t)(dutyCycle_.min() + dutyCycle_.range() * dutyCycle_.amp_corr() 
-               * sig_generator_());
-  zeroCrossingCheck(value);
+               * sig_value);
+  zeroCrossingCheck(sig_value);
   return dc;
 }
 

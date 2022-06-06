@@ -3,6 +3,7 @@
 
 #include "pwm_generator.hpp"
 #include "App/signal_generator/signals.h"
+#include <memory>
 
 typedef enum enPWM_Timers_ {
   TIM1_CH_1_2_DMA = 0,

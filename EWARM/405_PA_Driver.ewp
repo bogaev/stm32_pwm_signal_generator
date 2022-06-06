@@ -1100,7 +1100,7 @@
                         </excluded>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\App\signal_generator\signal_interface.h</name>
+                        <name>$PROJ_DIR$\..\App\signal_generator\signals.cpp</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\App\signal_generator\signals.h</name>
