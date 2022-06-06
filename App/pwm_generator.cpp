@@ -1,16 +1,12 @@
 #include "pwm_generator.hpp"
 
 PwmGenerator::PwmGenerator(SignalGenerator& sig_generator,
-                           const tdDutyCycle dutyCycle, tdDataBuffers& buffers) 
+                           const tdDutyCycleSettings settings, tdDataBuffers& buffers) 
   : sig_generator_(sig_generator),
-    dutyCycle_(dutyCycle),
+    corrector_({sig_generator_}),
+    dc_({settings, corrector_}),
     buffers_(buffers)
 {
-  dutyCycle_.timer_period = dutyCycle.timer_period;
-  dutyCycle_.cmin = dutyCycle.cmin / 100.f * dutyCycle.timer_period;
-  dutyCycle_.cmax = dutyCycle.cmax / 100.f * dutyCycle.timer_period;
-  dutyCycle_.amp = sig_generator.carrier_->GetAmp();
-  dutyCycle_.freq = sig_generator.carrier_->GetFreq();
   generateNextHalfbuffer();
   generateNextHalfbuffer();
 }
@@ -18,8 +14,7 @@ PwmGenerator::PwmGenerator(SignalGenerator& sig_generator,
 uint16_t PwmGenerator::getDutyCycle() {
   float sig_value = sig_generator_();
   uint16_t dc = 
-    (uint16_t)(dutyCycle_.min() + dutyCycle_.range() * dutyCycle_.amp_corr() 
-               * sig_value);
+    (uint16_t)(dc_.min() + dc_.range() * dc_.amp_corr() * sig_value);
   zeroCrossingCheck(sig_value);
   return dc;
 }
@@ -45,7 +40,7 @@ void PwmGenerator::setSignal(uint8_t signal, uint8_t param, uint16_t value) {
 }
 
 void PwmGenerator::zeroCrossingCheck(float value) {
-  value > 0 ? is_negative_halfwave = false : is_negative_halfwave = true;
+  value > 0 ? is_negative_halfwave = 0 : is_negative_halfwave = 1;
 }
 
 void PwmGenerator::reset() {
