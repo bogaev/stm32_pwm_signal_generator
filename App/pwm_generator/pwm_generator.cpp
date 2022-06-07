@@ -1,4 +1,4 @@
-#include "pwm_generator.hpp"
+#include "App/pwm_generator/pwm_generator.hpp"
 
 PwmGenerator::PwmGenerator(SignalGenerator& sig_generator,
                            const tdDutyCycleSettings settings,
@@ -16,7 +16,7 @@ float PwmGenerator::GetDutyCycle() {
   float sig_value = sig_generator_();
   float dc = 
     (uint16_t)(dc_.min() + dc_.range() * dc_.amp_corr() * sig_value);
-  zeroCrossingCheck(sig_value);
+  ZeroCrossingCheck(sig_value);
   return dc;
 }
 
@@ -40,15 +40,15 @@ uint16_t* PwmGenerator::GetBufferPtr(uint8_t num) {
 }
 
 void PwmGenerator::SetSignal(uint8_t signal, uint8_t param, uint16_t value) {
-  reset();
+  Reset();
   sig_generator_.SetSignal(signal, param, value);
 }
 
-inline void PwmGenerator::zeroCrossingCheck(float value) {
+inline void PwmGenerator::ZeroCrossingCheck(float value) {
   value > 0 ? is_negative_halfwave = 0 : is_negative_halfwave = 1;
 }
 
-void PwmGenerator::reset() {
+void PwmGenerator::Reset() {
   is_negative_halfwave = 0;
   buffer_index = 0;
   for(uint16_t i = 0; i < DATA_BUFFER_SIZE; ++i) {

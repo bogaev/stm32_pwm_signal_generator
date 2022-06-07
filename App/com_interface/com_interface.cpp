@@ -1,4 +1,4 @@
-#include "com_interface.hpp"
+#include "App/com_interface/com_interface.hpp"
 #include "boost/crc.hpp"
 #include <iostream>
 
@@ -18,8 +18,8 @@ void UartStart() {
   * @retval None
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-  if(uart.receiveMessage() == HAL_OK) {
-    uart.readMessage();
+  if(uart.ReceiveMessage() == HAL_OK) {
+    uart.ReadMessage();
   }
   else {
     Error_Handler();
@@ -30,11 +30,11 @@ void Uart::init() {
   HAL_UART_Receive_IT(&huart5, (uint8_t*)&message, sizeof(tdUartMessage));
 }
   
-HAL_StatusTypeDef Uart::receiveMessage() {
+HAL_StatusTypeDef Uart::ReceiveMessage() {
   return HAL_UART_Receive_IT(&huart5, (uint8_t*)&message, sizeof(tdUartMessage));
 }
   
-void Uart::readMessage() {
+void Uart::ReadMessage() {
   boost::crc_32_type crc32;
   crc32.process_bytes( &message.data, sizeof(message.data) );
   uint32_t crc = crc32.checksum();

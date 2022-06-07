@@ -1,7 +1,8 @@
-#include "pwm_os_tasks.hpp"
+#include "tim.h"
+
+#include "App/pwm_os_tasks/pwm_os_tasks.hpp"
 #include "App/pwm_controller/pwm_controller.hpp"
 #include "App/com_interface/com_interface.hpp"
-#include "tim.h"
 
 #include <memory>
 

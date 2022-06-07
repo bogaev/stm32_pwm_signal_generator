@@ -1,4 +1,4 @@
-#include "signals.h"
+#include "App/signal_generator/signals.hpp"
 
 // class Signal --------------------------------------------------------------
 

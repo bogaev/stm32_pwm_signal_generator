@@ -21,8 +21,8 @@ class Uart {
   
 public:
   void init();
-  HAL_StatusTypeDef receiveMessage();
-  void readMessage();
+  HAL_StatusTypeDef ReceiveMessage();
+  void ReadMessage();
 };
 
 #endif // #ifndef _COM_INTERFACE_H_

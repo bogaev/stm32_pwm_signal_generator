@@ -2,7 +2,8 @@
 #define _PWM_CONTROLLER_H_
 
 #include "App/pwm_generator/pwm_generator.hpp"
-#include "App/signal_generator/signals.h"
+#include "App/signal_generator/signals.hpp"
+
 #include <memory>
 
 typedef enum enPWM_Timers_ {

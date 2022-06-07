@@ -4,7 +4,7 @@
 #include "main.h"
 #include <cmath>
 
-#include "App/signal_generator/signal_generator.h"
+#include "App/signal_generator/signal_generator.hpp"
 
 struct tdDataBuffers {
   uint16_t* ptr[2] = { nullptr, nullptr };
@@ -86,8 +86,8 @@ public:
   uint16_t* GetBufferPtr(uint8_t num);
   
 private:
-  inline void zeroCrossingCheck(float value);
-  void reset();
+  inline void ZeroCrossingCheck(float value);
+  void Reset();
   
   SignalGenerator& sig_generator_;
   tdCorrector corrector_;

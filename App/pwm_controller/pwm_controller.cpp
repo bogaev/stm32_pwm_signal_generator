@@ -1,5 +1,6 @@
-#include "pwm_controller.hpp"
 #include "tim.h"
+
+#include "App/pwm_controller/pwm_controller.hpp"
 
 PwmController::PwmController(TIM_HandleTypeDef* timer,
                              tdPwmChannels channels,
