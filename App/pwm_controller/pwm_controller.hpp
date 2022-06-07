@@ -23,52 +23,57 @@ struct tdPwmChannels {
   uint32_t negativeHalfwaveChannel;
 };
 
-class PwmController {    
+class PwmController {
 public:
-    PwmController(TIM_HandleTypeDef* timer, tdPwmChannels channels, PwmGenerator& generator);
-    ~PwmController();
-    uint8_t IsStarted();
-    void SetPWM(uint8_t signal, uint8_t param, uint16_t value);
-    void Start_DMA(const tdDataBuffers& dma);
-    void Start_IT();
-    void Start_IT_buffer(const tdDataBuffers& b);
-    void Stop();
-    void NextValueFromBuffer();
+    PwmController(TIM_HandleTypeDef* timer,
+                  tdPwmChannels channels,
+                  PwmGenerator& generator);
+    virtual ~PwmController();
     
-private:
+    virtual void Start() = 0;
+    virtual void Run() = 0;
+    void Stop();
+
+    void SetPWM(uint8_t signal, uint8_t param, uint16_t value);
+    
+protected:
     uint16_t TOTAL_POINTS_NUM;
-    uint32_t IT_buffer_index = 0;
-    uint8_t is_started = 0;
+    bool is_started = false;
     
     TIM_HandleTypeDef* timer_ = nullptr;
-    PwmGenerator& generator_;
     tdPwmChannels channels_;
-    const tdDataBuffers* b_;
+    PwmGenerator& generator_;
 };
 
-//class DMAPwmController : public PwmController {    
-//public:
-//    PwmController(TIM_HandleTypeDef* timer, tdPwmChannels channels, PwmGenerator& generator);
-//    ~PwmController();
-//    uint8_t IsStarted();
-//    void SetPWM(uint8_t signal, uint8_t param, uint16_t value);
-//    void Start_DMA(const tdDataBuffers& dma);
-//    void Start_IT();
-//    void Start_IT_buffer(const tdDataBuffers& b);
-//    void Stop();
-//    void NextValueFromBuffer();
-//    
-//private:
-//    uint16_t TOTAL_POINTS_NUM;
-//    uint32_t IT_buffer_index = 0;
-//    uint8_t is_started = 0;
-//    
-//    TIM_HandleTypeDef* timer_ = nullptr;
-//    PwmGenerator& generator_;
-//    tdPwmChannels channels_;
-//    const tdDataBuffers* b_;
-//};
-//
-//extern "C" void InitPwmControllers();
+class DMA_PwmController : public PwmController {
+public:
+    DMA_PwmController(TIM_HandleTypeDef* timer,
+                     tdPwmChannels channels,
+                     PwmGenerator& generator,
+                     const tdDataBuffers& buffers);
+    void Start() override;
+    void Run() override;
+
+private:
+    const tdDataBuffers& buffers_;
+};
+
+class IT_PwmController : public PwmController {    
+public:
+    IT_PwmController(TIM_HandleTypeDef* timer,
+                     tdPwmChannels channels,
+                     PwmGenerator& generator);
+    void Start() override;
+    void Run() override;
+    void SetBuffer(const tdDataBuffers* buffers);
+    void ResetBuffer();
+    
+private:
+    void GetValueFromBuffer();
+    void GetValue();
+    
+    const tdDataBuffers* buffers_ = nullptr;
+    uint32_t index = 0;
+};
 
 #endif // #ifndef _SIN_H_

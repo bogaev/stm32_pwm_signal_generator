@@ -3,7 +3,9 @@
 #include "App/com_interface/com_interface.hpp"
 #include "tim.h"
 
-extern osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
+#include <memory>
+
+extern osSemaphoreId_t GeneratePWMSemaphoreHandle;
 extern osMutexId_t MutexChangeParamsHandle;
 extern osMessageQueueId_t SignalGeneratorQueueHandle;
 extern UART_HandleTypeDef huart5;
@@ -11,12 +13,11 @@ extern Uart uart;
 
 volatile size_t counterNextHalfWaveSemaphore;
 static void GiveSemaphore();
-extern PwmController* pwm[PWM_NUM];
-extern PwmGenerator* pwmGenerator;
+static PwmController* pwms[PWM_NUM];
 
 void GiveSemaphore() {
-  osSemaphoreRelease(GenerateHalfWaveSemaphoreHandle);
-  counterNextHalfWaveSemaphore = osSemaphoreGetCount(GenerateHalfWaveSemaphoreHandle);
+  osSemaphoreRelease(GeneratePWMSemaphoreHandle);
+  counterNextHalfWaveSemaphore = osSemaphoreGetCount(GeneratePWMSemaphoreHandle);
   if(counterNextHalfWaveSemaphore >= 20) {
     HAL_GPIO_WritePin(LED3_RED_GPIO_Port, LED3_RED_Pin, GPIO_PIN_SET);
   }
@@ -31,35 +32,15 @@ void HAL_TIM_PWM_PulseFinishedHalfCpltCallback(TIM_HandleTypeDef *htim) {
   }
 }
 
-void GenerateHalfwaveTask(void *argument) {
+void GeneratePWM(void *argument) {
   /* Infinite loop */
   for(;;) {
-    osSemaphoreAcquire(GenerateHalfWaveSemaphoreHandle, portMAX_DELAY);
+    osSemaphoreAcquire(GeneratePWMSemaphoreHandle, portMAX_DELAY);
     osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
-    pwm[TIM1_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH_3_4_IT]->IsStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_1_2_IT]->IsStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_3_4_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM4_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM4_CH_3_4_IT]->IsStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM8_CH_1_2_IT]->IsStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM12_CH_1_2_IT]->IsStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+    for(auto& pwm : pwms) {
+      pwm->Run();
+    }
     osMutexRelease(MutexChangeParamsHandle);
-  }
-}
-
-void Generate_IT_wave(void *argument) {
-  for(;;) {
-////    pwm[TIM1_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM2_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH_3_4_IT]->IsStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_1_2_IT]->IsStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_3_4_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM4_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//////    pwm[TIM4_CH_3_4_IT]->IsStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM8_CH_1_2_IT]->IsStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM12_CH_1_2_IT]->IsStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
   }
 }
 
@@ -88,11 +69,42 @@ void ChangeSignalParamsTask(void *argument)
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
     if (status == osOK) {
       osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
-      pwm[msg.emitter]->SetPWM(msg.signal, msg.param, msg.value);
+      pwms[msg.emitter]->SetPWM(msg.signal, msg.param, msg.value);
       osMutexRelease(MutexChangeParamsHandle);
     }
     else {
       Error_Handler();
     }
+  }
+}
+
+void InitPwmControllers() {
+//  const int DUTY_CYCLE_MIN = 50;
+//  const int DUTY_CYCLE_MAX = 65;
+
+  const int DUTY_CYCLE_MIN = 60;
+  const int DUTY_CYCLE_MAX = 75;
+  const float TIMER_PERIOD = 656.f;
+
+  static uint16_t dma_positive[DATA_BUFFER_SIZE] = {0};
+  static uint16_t dma_negative[DATA_BUFFER_SIZE] = {0};
+  static tdDataBuffers dma_buffers = { {dma_positive, dma_negative} };
+    
+  static SignalGenerator signal_generator;
+  static PwmGenerator pwm_generator(signal_generator, 
+                                 {DUTY_CYCLE_MIN, DUTY_CYCLE_MAX, TIMER_PERIOD},
+                                 dma_buffers);
+
+  pwms[TIM1_CH_1_2_DMA] = new DMA_PwmController(&htim1, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator, dma_buffers);
+  pwms[TIM2_CH_1_2_DMA] = new DMA_PwmController(&htim2, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator, dma_buffers);
+  pwms[TIM2_CH_3_4_IT] = new IT_PwmController(&htim2, {TIM_CHANNEL_3, TIM_CHANNEL_4}, pwm_generator);
+  pwms[TIM3_CH_1_2_IT] = new IT_PwmController(&htim3, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
+  pwms[TIM3_CH_3_4_DMA] = new DMA_PwmController(&htim3, {TIM_CHANNEL_3, TIM_CHANNEL_4}, pwm_generator, dma_buffers);
+  pwms[TIM4_CH_1_2_DMA] = new DMA_PwmController(&htim4, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator, dma_buffers);
+  pwms[TIM8_CH_1_2_IT] = new IT_PwmController(&htim8, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
+  pwms[TIM12_CH_1_2_IT] = new IT_PwmController(&htim12, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
+  
+  for(auto& pwm : pwms) {
+    pwm->Start();
   }
 }

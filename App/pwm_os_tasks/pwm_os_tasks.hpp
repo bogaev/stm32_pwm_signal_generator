@@ -5,8 +5,8 @@
 
 extern "C" void HAL_TIM_PWM_PulseFinishedHalfCpltCallback(TIM_HandleTypeDef *htim);
 extern "C" void StartDefaultTask(void *argument);
-extern "C" void GenerateHalfwaveTask(void *argument);
+extern "C" void GeneratePWM(void *argument);
 extern "C" void ChangeSignalParamsTask(void *argument);
-extern "C" void Generate_IT_wave(void *argument);
+extern "C" void InitPwmControllers();
 
 #endif // #ifndef _PWM_OS_TASKS_H_

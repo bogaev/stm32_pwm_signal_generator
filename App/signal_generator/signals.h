@@ -10,6 +10,7 @@ const float pi = std::acos(-1);
 
 class Signal {
 public:
+  virtual ~Signal() {};
   void SetParam(uint8_t param, uint16_t value);
   Signal& SetAmp(float amp);
   Signal& SetFreq(float freq);

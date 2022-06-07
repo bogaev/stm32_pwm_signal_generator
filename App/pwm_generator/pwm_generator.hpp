@@ -7,7 +7,7 @@
 #include "App/signal_generator/signal_generator.h"
 
 struct tdDataBuffers {
-  uint16_t* buffer[2] = { nullptr, nullptr };
+  uint16_t* ptr[2] = { nullptr, nullptr };
 };
 
 const float amp_coeff[3][2] = {
@@ -80,9 +80,9 @@ public:
                 const tdDutyCycleSettings dutyCycle,
                 tdDataBuffers& buffers);
   void SetSignal(uint8_t signal, uint8_t param, uint16_t value);
-  inline uint16_t getDutyCycle();
-  void updateBuffer();
-  void generateNextHalfbuffer();
+  float GetDutyCycle();
+  void UpdateBuffer();
+  void GenerateNextHalfbuffer();
   
 private:
   inline void zeroCrossingCheck(float value);
