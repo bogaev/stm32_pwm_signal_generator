@@ -84,10 +84,10 @@ osMutexId_t MutexChangeParamsHandle;
 const osMutexAttr_t MutexChangeParams_attributes = {
   .name = "MutexChangeParams"
 };
-/* Definitions for GenerateHalfWaveSemaphore */
-osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
-const osSemaphoreAttr_t GenerateHalfWaveSemaphore_attributes = {
-  .name = "GenerateHalfWaveSemaphore"
+/* Definitions for GeneratePWMSemaphore */
+osSemaphoreId_t GeneratePWMSemaphoreHandle;
+const osSemaphoreAttr_t GeneratePWMSemaphore_attributes = {
+  .name = "GeneratePWMSemaphore"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -120,8 +120,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_MUTEX */
 
   /* Create the semaphores(s) */
-  /* creation of GenerateHalfWaveSemaphore */
-  GenerateHalfWaveSemaphoreHandle = osSemaphoreNew(30, 30, &GenerateHalfWaveSemaphore_attributes);
+  /* creation of GeneratePWMSemaphore */
+  GeneratePWMSemaphoreHandle = osSemaphoreNew(30, 30, &GeneratePWMSemaphore_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
