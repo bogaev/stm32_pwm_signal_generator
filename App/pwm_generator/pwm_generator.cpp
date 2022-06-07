@@ -1,7 +1,8 @@
 #include "pwm_generator.hpp"
 
 PwmGenerator::PwmGenerator(SignalGenerator& sig_generator,
-                           const tdDutyCycleSettings settings, tdDataBuffers& buffers) 
+                           const tdDutyCycleSettings settings,
+                           tdDataBuffers& buffers) 
   : sig_generator_(sig_generator),
     corrector_({sig_generator_}),
     dc_({settings, corrector_}),
@@ -34,9 +35,9 @@ void PwmGenerator::generateNextHalfbuffer() {
   }
 }
 
-void PwmGenerator::setSignal(uint8_t signal, uint8_t param, uint16_t value) {
+void PwmGenerator::SetSignal(uint8_t signal, uint8_t param, uint16_t value) {
   reset();
-  sig_generator_.setSignal(signal, param, value);
+  sig_generator_.SetSignal(signal, param, value);
 }
 
 void PwmGenerator::zeroCrossingCheck(float value) {

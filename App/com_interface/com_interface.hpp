@@ -3,7 +3,7 @@
 
 #include "usart.h"
 #include "cmsis_os.h"
-#include "pwm_types.h"
+#include "App/pwm_types.h"
 
 extern UART_HandleTypeDef huart5;
 extern CRC_HandleTypeDef hcrc;

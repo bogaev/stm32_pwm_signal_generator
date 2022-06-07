@@ -53,6 +53,7 @@ public:
     else {
       GenerateCarrier();
     }
+    ++time_;
     return value_;
   }
 
@@ -76,17 +77,43 @@ public:
     }
     return *this;
   }
+
+  float GetAmp() {
+    if(carrier_) {
+      return (*carrier_).GetAmp();
+    }
+    return 0;
+  }
+
+  float GetFreq() {
+    if(carrier_) {
+      return (*carrier_).GetFreq();
+    }
+    return 0;
+  }
   
-  void setSignal(uint8_t signal, uint8_t param, uint16_t value) {
+  void SetSignal(uint8_t signal, uint8_t param, uint16_t value) {
     reset();
-    if(signal == (uint8_t)UART_SIGNAL_CARRIER) {
-      (*carrier_).setParam(param, value);
+    if(signal == UART_SIGNAL_CARRIER) {
+      if(param == UART_PARAM_SIGNAL_TYPE) {
+        carrier_ = Signal{}.Create(static_cast<tdSignalTypes_>(value));
+        return;
+      }
+      (*carrier_).SetParam(param, value);
     }
-    else if(signal == (uint8_t)UART_SIGNAL_AMP_MOD) {
-      (*amod_).setParam(param, value);
+    else if(signal == UART_SIGNAL_AMP_MOD) {
+      if(param == UART_PARAM_SIGNAL_TYPE) {
+        amod_ = Signal{}.Create(static_cast<tdSignalTypes_>(value));
+        return;
+      }
+      (*amod_).SetParam(param, value);
     }
-    else if(signal == (uint8_t)UART_SIGNAL_FREQ_MOD) {
-      (*fmod_).setParam(param,value);
+    else if(signal == UART_SIGNAL_FREQ_MOD) {
+      if(param == UART_PARAM_SIGNAL_TYPE) {
+        fmod_ = Signal{}.Create(static_cast<tdSignalTypes_>(value));
+        return;
+      }
+      (*fmod_).SetParam(param,value);
     }
   }
 

@@ -6,8 +6,6 @@
 
 #include "App/signal_generator/signal_generator.h"
 
-const float TIMER_PERIOD = 656.f;
-
 struct tdDataBuffers {
   uint16_t* buffer[2] = { nullptr, nullptr };
 };
@@ -18,8 +16,8 @@ const float amp_coeff[3][2] = {
   {0.45f, 1.7f}
 };
 
-#define AMP_GAIN amp_coeff[(int)sig_.carrier_->GetAmp()-1][0]
-#define FREQ_SLOPE amp_coeff[(int)sig_.carrier_->GetAmp()-1][1]
+#define AMP_GAIN amp_coeff[(int)sig_.GetAmp()-1][0]
+#define FREQ_SLOPE amp_coeff[(int)sig_.GetAmp()-1][1]
 
 struct tdDutyCycleSettings {
   float min;
@@ -27,15 +25,16 @@ struct tdDutyCycleSettings {
   float timer_period;
 };
 
-struct tdCorrector {
+class tdCorrector {
+public:
   SignalGenerator& sig_;
   
   inline float freq_corr(float slope) const {
-    return (sig_.carrier_->GetFreq() / MAX_FREQ_COUNT) * slope + (1.f - slope);
+    return (sig_.GetFreq() / MAX_FREQ_COUNT) * slope + (1.f - slope);
   }
   
   inline float amp_corr() const {
-    return sig_.carrier_->GetAmp() * AMP_GAIN + (1.f - AMP_GAIN) * freq_corr(FREQ_SLOPE);
+    return sig_.GetAmp() * AMP_GAIN + (1.f - AMP_GAIN) * freq_corr(FREQ_SLOPE);
   }
 };
 
@@ -78,8 +77,9 @@ private:
 class PwmGenerator {    
 public:
   PwmGenerator(SignalGenerator& sig_generator,
-                const tdDutyCycleSettings dutyCycle, tdDataBuffers& buffers);
-  void setSignal(uint8_t signal, uint8_t param, uint16_t value);
+                const tdDutyCycleSettings dutyCycle,
+                tdDataBuffers& buffers);
+  void SetSignal(uint8_t signal, uint8_t param, uint16_t value);
   inline uint16_t getDutyCycle();
   void updateBuffer();
   void generateNextHalfbuffer();

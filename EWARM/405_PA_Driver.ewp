@@ -1083,6 +1083,42 @@
             <group>
                 <name>App</name>
                 <group>
+                    <name>com_interface</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\com_interface\com_interface.cpp</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\com_interface\com_interface.hpp</name>
+                    </file>
+                </group>
+                <group>
+                    <name>pwm_controller</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\pwm_controller\pwm_controller.cpp</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\pwm_controller\pwm_controller.hpp</name>
+                    </file>
+                </group>
+                <group>
+                    <name>pwm_generator</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\pwm_generator\pwm_generator.cpp</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\pwm_generator\pwm_generator.hpp</name>
+                    </file>
+                </group>
+                <group>
+                    <name>pwm_os_tasks</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\pwm_os_tasks\pwm_os_tasks.cpp</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\App\pwm_os_tasks\pwm_os_tasks.hpp</name>
+                    </file>
+                </group>
+                <group>
                     <name>signal_generator</name>
                     <file>
                         <name>$PROJ_DIR$\..\App\signal_generator\signal_generator.h</name>
@@ -1106,30 +1142,6 @@
                         <name>$PROJ_DIR$\..\App\signal_generator\signals.h</name>
                     </file>
                 </group>
-                <file>
-                    <name>$PROJ_DIR$\..\App\com_interface.cpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\com_interface.hpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\pwm_controller.cpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\pwm_controller.hpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\pwm_generator.cpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\pwm_generator.hpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\pwm_os_tasks.cpp</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\App\pwm_os_tasks.hpp</name>
-                </file>
                 <file>
                     <name>$PROJ_DIR$\..\App\pwm_types.h</name>
                 </file>

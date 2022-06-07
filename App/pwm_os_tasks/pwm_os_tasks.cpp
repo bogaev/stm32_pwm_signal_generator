@@ -1,6 +1,6 @@
 #include "pwm_os_tasks.hpp"
-#include "pwm_controller.hpp"
-#include "com_interface.hpp"
+#include "App/pwm_controller/pwm_controller.hpp"
+#include "App/com_interface/com_interface.hpp"
 #include "tim.h"
 
 extern osSemaphoreId_t GenerateHalfWaveSemaphoreHandle;
@@ -36,30 +36,30 @@ void GenerateHalfwaveTask(void *argument) {
   for(;;) {
     osSemaphoreAcquire(GenerateHalfWaveSemaphoreHandle, portMAX_DELAY);
     osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
-    pwm[TIM1_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH_3_4_IT]->isStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_1_2_IT]->isStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_3_4_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM4_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM4_CH_3_4_IT]->isStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM8_CH_1_2_IT]->isStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM12_CH_1_2_IT]->isStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+    pwm[TIM1_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM2_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM2_CH_3_4_IT]->IsStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_1_2_IT]->IsStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_3_4_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM4_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+////    pwm[TIM4_CH_3_4_IT]->IsStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM8_CH_1_2_IT]->IsStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM12_CH_1_2_IT]->IsStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
     osMutexRelease(MutexChangeParamsHandle);
   }
 }
 
 void Generate_IT_wave(void *argument) {
   for(;;) {
-////    pwm[TIM1_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-////    pwm[TIM2_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM2_CH_3_4_IT]->isStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_1_2_IT]->isStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM3_CH_3_4_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//    pwm[TIM4_CH_1_2_DMA]->isStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
-//////    pwm[TIM4_CH_3_4_IT]->isStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM8_CH_1_2_IT]->isStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
-//    pwm[TIM12_CH_1_2_IT]->isStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+////    pwm[TIM1_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+////    pwm[TIM2_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM2_CH_3_4_IT]->IsStarted() ? pwm[TIM2_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_1_2_IT]->IsStarted() ? pwm[TIM3_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM3_CH_3_4_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//    pwm[TIM4_CH_1_2_DMA]->IsStarted() ? pwmGenerator->generateNextHalfbuffer() : (void)0U;
+//////    pwm[TIM4_CH_3_4_IT]->IsStarted() ?  pwm[TIM4_CH_3_4_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM8_CH_1_2_IT]->IsStarted() ?  pwm[TIM8_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
+//    pwm[TIM12_CH_1_2_IT]->IsStarted() ? pwm[TIM12_CH_1_2_IT]->nextValueFromBuffer() : (void)0U;
   }
 }
 
@@ -88,7 +88,7 @@ void ChangeSignalParamsTask(void *argument)
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
     if (status == osOK) {
       osMutexAcquire(MutexChangeParamsHandle, osWaitForever);
-      pwm[msg.emitter]->setPWM(msg.signal, msg.param, msg.value);
+      pwm[msg.emitter]->SetPWM(msg.signal, msg.param, msg.value);
       osMutexRelease(MutexChangeParamsHandle);
     }
     else {
