@@ -45,7 +45,7 @@ std::unique_ptr<Signal> Signal::Create(tdSignalTypes_ sig_type) {
     return std::make_unique<Sinus>();
   }
   else if(sig_type == SIGNAL_TYPE_MEANDR) {
-    return std::make_unique<Meandr>();
+    return std::make_unique<Square>();
   }
   else if(sig_type == SIGNAL_TYPE_TRIANGLE) {
     return std::make_unique<Triangle>();
@@ -58,56 +58,86 @@ std::unique_ptr<Signal> Signal::Create(tdSignalTypes_ sig_type) {
 
 // class Sinus ---------------------------------------------------------------
 
-float Sinus::operator()(uint32_t time) const {
-  return amp_ * std::sin(pi * freq_ * time);
+float Sinus::operator()(float x) {
+  return amp_ * std::sin(pi * freq_ * x);
 }
   
-float Sinus::FM(uint32_t time, Signal& fmod) const {
-    return amp_ * std::sin(pi * freq_ * time + fmod.GetIntegral(time));
+float Sinus::FM(float x, Signal& fmod) {
+    return amp_ * std::sin(pi * freq_ * x + fmod.GetIntegral(x));
 }
   
-float Sinus::GetIntegral(uint32_t time) const {
-      return amp_ * std::cos(pi * freq_ * time);
+float Sinus::GetIntegral(float x) {
+      return amp_ * std::cos(pi * freq_ * x);
 }
 
-// class Meandr ---------------------------------------------------------------
+// class Square ---------------------------------------------------------------
 
-float Meandr::operator()(uint32_t time) const {
-  return amp_ * std::sin(pi * freq_ * time);
+float Square::operator()(float time) {
+  float time_ = (int)time % (int)period_;
+  return square(time_);
 }
   
-float Meandr::FM(uint32_t time, Signal& fmod) const {
-    return amp_ * std::sin(pi * freq_ * time + fmod.GetIntegral(time));
+float Square::FM(float time, Signal& fmod) {
+  float time_ = (int)time % (int)period_;
+  return square(time_ + fmod.GetIntegral(time_));
 }
   
-float Meandr::GetIntegral(uint32_t time) const {
-      return amp_ * std::cos(pi * freq_ * time);
+float Square::GetIntegral(float x) {
+  if(x < period_ / 2) {
+    return x;
+  }
+  return -x;
+}
+
+float Square::square(float x) {
+  if(x < period_ / 2) {
+    return amp_;
+  }
+  return -amp_;
 }
 
 // class Triangle ---------------------------------------------------------------
 
-float Triangle::operator()(uint32_t time) const {
-  return amp_ * std::sin(pi * freq_ * time);
+float Triangle::operator()(float x) {
+  float time_ = (int)x % (int)period_;
+  return amp_ * triangle(time_);
 }
-  
-float Triangle::FM(uint32_t time, Signal& fmod) const {
-    return amp_ * std::sin(pi * freq_ * time + fmod.GetIntegral(time));
+
+float Triangle::FM(float x, Signal& fmod) {
+  float time_ = (int)x % (int)period_;
+  return amp_ * triangle(time_ + fmod.GetIntegral(time_));
 }
-  
-float Triangle::GetIntegral(uint32_t time) const {
-      return amp_ * std::cos(pi * freq_ * time);
+
+float Triangle::GetIntegral(float x) {
+  if(x < period_ / 2) {
+    return x * (2*x / period_ - 1);
+  }
+  return x * (3 - 2*x / period_);
+}
+
+float Triangle::triangle(float x) {
+  if(x < period_ / 2) {
+    return 4*x / period_ - 1;
+  }
+  return 3 - 4*x / period_;
 }
 
 // class Saw ---------------------------------------------------------------
 
-float Saw::operator()(uint32_t time) const {
-  return amp_ * std::sin(pi * freq_ * time);
+float Saw::operator()(float x) {
+  float time_ = (int)x % (int)period_;
+  return amp_ * sawtooth(time_);
 }
-  
-float Saw::FM(uint32_t time, Signal& fmod) const {
-    return amp_ * std::sin(pi * freq_ * time + fmod.GetIntegral(time));
+
+float Saw::FM(float x, Signal& fmod) {
+  float time_ = (int)x % (int)period_;
+  return amp_ * sawtooth(time_ + amp_ * fmod.GetIntegral(time_));
 }
-  
-float Saw::GetIntegral(uint32_t time) const {
-      return amp_ * std::cos(pi * freq_ * time);
+
+float Saw::GetIntegral(float x) {
+  return x * (x - period_) / period_;
+}
+
+float Saw::sawtooth(float x) {
+  return 2 * x / period_ - 1;
 }

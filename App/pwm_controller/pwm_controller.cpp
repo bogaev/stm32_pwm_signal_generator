@@ -35,16 +35,14 @@ void PwmController::SetPWM(uint8_t signal, uint8_t param, uint16_t value) {
 
 DMA_PwmController::DMA_PwmController(TIM_HandleTypeDef* timer,
                  tdPwmChannels channels,
-                 PwmGenerator& generator,
-                 const tdDataBuffers& buffers)
-: PwmController(timer, channels, generator),
-  buffers_(buffers)
+                 PwmGenerator& generator)
+: PwmController(timer, channels, generator)
 {}
 
 void DMA_PwmController::Start() {
   Stop();
-  HAL_TIM_PWM_Start_DMA(timer_, channels_.positiveHalfwaveChannel, (uint32_t*)buffers_.ptr[0], DATA_BUFFER_SIZE);
-  HAL_TIM_PWM_Start_DMA(timer_, channels_.negativeHalfwaveChannel, (uint32_t*)buffers_.ptr[1], DATA_BUFFER_SIZE);
+  HAL_TIM_PWM_Start_DMA(timer_, channels_.positiveHalfwaveChannel, (uint32_t*)generator_.GetBufferPtr(0), DATA_BUFFER_SIZE);
+  HAL_TIM_PWM_Start_DMA(timer_, channels_.negativeHalfwaveChannel, (uint32_t*)generator_.GetBufferPtr(1), DATA_BUFFER_SIZE);
   is_started = true;
 }
 
@@ -65,13 +63,13 @@ void IT_PwmController::Start() {
   Stop();
   HAL_TIM_PWM_Start_IT(timer_, channels_.positiveHalfwaveChannel);
   HAL_TIM_PWM_Start_IT(timer_, channels_.negativeHalfwaveChannel);
-  index = 0;
+  buffer_index = 0;
   is_started = true;
 }
 
 void IT_PwmController::Run() {
   if(!is_started) return;
-  if(buffers_) {
+  if(is_buffer_used_) {
     generator_.GenerateNextHalfbuffer();
     GetValueFromBuffer();
   }
@@ -80,24 +78,20 @@ void IT_PwmController::Run() {
   }
 }
 
-void IT_PwmController::SetBuffer(const tdDataBuffers* buffers) {
-  buffers_ = buffers;
-}
-
-void IT_PwmController::ResetBuffer() {
-  buffers_ = nullptr;
+void IT_PwmController::SetUseBuffer(bool is_buffer_used) {
+  is_buffer_used_ = is_buffer_used;
 }
 
 void IT_PwmController::GetValueFromBuffer() {
   __HAL_TIM_SET_COMPARE(timer_,
                         channels_.positiveHalfwaveChannel,
-                        buffers_->ptr[0][index]);
+                        generator_.GetBufferPtr(0)[buffer_index]);
   __HAL_TIM_SET_COMPARE(timer_,
                         channels_.negativeHalfwaveChannel,
-                        buffers_->ptr[1][index]);
-  ++index;
-  if(index >= DATA_BUFFER_SIZE) {
-    index = 0;
+                        generator_.GetBufferPtr(1)[buffer_index]);
+  ++buffer_index;
+  if(buffer_index >= DATA_BUFFER_SIZE) {
+    buffer_index = 0;
   }
 }
 

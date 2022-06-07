@@ -6,7 +6,13 @@
 #include <cmath>
 #include <memory>
 
+/*
+https://math.stackexchange.com/questions/178079/integration-of-sawtooth-square-and-triangle-wave-functions
+*/
+
 const float pi = std::acos(-1);
+float square(float x);
+float triangle(float x);
 
 class Signal {
 public:
@@ -20,9 +26,9 @@ public:
   float GetPeriod();
   std::unique_ptr<Signal> Create(tdSignalTypes_ sig_type);
   
-  virtual float operator()(uint32_t time) const { return 0; };
-  virtual float FM(uint32_t time, Signal& sig) const { return 0; };
-  virtual float GetIntegral(uint32_t time) const { return 0; };
+  virtual float operator()(float time) { return 0; };
+  virtual float FM(float time, Signal& sig) { return 0; };
+  virtual float GetIntegral(float time) { return 0; };
 
 protected:
   float freq_ = 1;
@@ -32,30 +38,39 @@ protected:
 
 class Sinus : public Signal {
 public:
-  float operator()(uint32_t time) const override;
-  float FM(uint32_t time, Signal& fmod) const override;
-  float GetIntegral(uint32_t time) const override;
+  float operator()(float time) override;
+  float FM(float time, Signal& fmod) override;
+  float GetIntegral(float time) override;
 };
 
-class Meandr : public Signal {
+class Square : public Signal {
 public:
-  float operator()(uint32_t time) const override;
-  float FM(uint32_t time, Signal& fmod) const override;
-  float GetIntegral(uint32_t time) const override;
+  float operator()(float time) override;
+  float FM(float time, Signal& fmod) override;
+  float GetIntegral(float time) override;
+  
+private:
+  float square(float x);
 };
 
 class Triangle : public Signal {
 public:
-  float operator()(uint32_t time) const override;
-  float FM(uint32_t time, Signal& fmod) const override;
-  float GetIntegral(uint32_t time) const override;
+  float operator()(float time) override;
+  float FM(float time, Signal& fmod) override;
+  float GetIntegral(float time) override;
+  
+private:
+  float triangle(float x);
 };
 
 class Saw : public Signal {
 public:
-  float operator()(uint32_t time) const override;
-  float FM(uint32_t time, Signal& fmod) const override;
-  float GetIntegral(uint32_t time) const override;
+  float operator()(float time) override;
+  float FM(float time, Signal& fmod) override;
+  float GetIntegral(float time) override;
+  
+private:
+  float sawtooth(float x);
 };
 
 #endif // #ifndef _SIGNALS_H_

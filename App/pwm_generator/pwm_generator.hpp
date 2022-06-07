@@ -83,6 +83,7 @@ public:
   float GetDutyCycle();
   void UpdateBuffer();
   void GenerateNextHalfbuffer();
+  uint16_t* GetBufferPtr(uint8_t num);
   
 private:
   inline void zeroCrossingCheck(float value);

@@ -35,6 +35,10 @@ void PwmGenerator::GenerateNextHalfbuffer() {
   }
 }
 
+uint16_t* PwmGenerator::GetBufferPtr(uint8_t num) {
+  return (uint16_t*)buffers_.ptr[num];
+}
+
 void PwmGenerator::SetSignal(uint8_t signal, uint8_t param, uint16_t value) {
   reset();
   sig_generator_.SetSignal(signal, param, value);

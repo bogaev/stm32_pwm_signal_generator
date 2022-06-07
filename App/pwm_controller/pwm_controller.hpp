@@ -49,13 +49,9 @@ class DMA_PwmController : public PwmController {
 public:
     DMA_PwmController(TIM_HandleTypeDef* timer,
                      tdPwmChannels channels,
-                     PwmGenerator& generator,
-                     const tdDataBuffers& buffers);
+                     PwmGenerator& generator);
     void Start() override;
     void Run() override;
-
-private:
-    const tdDataBuffers& buffers_;
 };
 
 class IT_PwmController : public PwmController {    
@@ -65,15 +61,14 @@ public:
                      PwmGenerator& generator);
     void Start() override;
     void Run() override;
-    void SetBuffer(const tdDataBuffers* buffers);
-    void ResetBuffer();
+    void SetUseBuffer(bool is_buffer_used);
     
 private:
     void GetValueFromBuffer();
     void GetValue();
     
-    const tdDataBuffers* buffers_ = nullptr;
-    uint32_t index = 0;
+    bool is_buffer_used_ = false;
+    uint32_t buffer_index = 0;
 };
 
 #endif // #ifndef _SIN_H_

@@ -95,12 +95,12 @@ void InitPwmControllers() {
                                  {DUTY_CYCLE_MIN, DUTY_CYCLE_MAX, TIMER_PERIOD},
                                  dma_buffers);
 
-  pwms[TIM1_CH_1_2_DMA] = new DMA_PwmController(&htim1, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator, dma_buffers);
-  pwms[TIM2_CH_1_2_DMA] = new DMA_PwmController(&htim2, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator, dma_buffers);
+  pwms[TIM1_CH_1_2_DMA] = new DMA_PwmController(&htim1, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
+  pwms[TIM2_CH_1_2_DMA] = new DMA_PwmController(&htim2, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
   pwms[TIM2_CH_3_4_IT] = new IT_PwmController(&htim2, {TIM_CHANNEL_3, TIM_CHANNEL_4}, pwm_generator);
   pwms[TIM3_CH_1_2_IT] = new IT_PwmController(&htim3, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
-  pwms[TIM3_CH_3_4_DMA] = new DMA_PwmController(&htim3, {TIM_CHANNEL_3, TIM_CHANNEL_4}, pwm_generator, dma_buffers);
-  pwms[TIM4_CH_1_2_DMA] = new DMA_PwmController(&htim4, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator, dma_buffers);
+  pwms[TIM3_CH_3_4_DMA] = new DMA_PwmController(&htim3, {TIM_CHANNEL_3, TIM_CHANNEL_4}, pwm_generator);
+  pwms[TIM4_CH_1_2_DMA] = new DMA_PwmController(&htim4, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
   pwms[TIM8_CH_1_2_IT] = new IT_PwmController(&htim8, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
   pwms[TIM12_CH_1_2_IT] = new IT_PwmController(&htim12, {TIM_CHANNEL_1, TIM_CHANNEL_2}, pwm_generator);
   
